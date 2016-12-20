@@ -17,48 +17,48 @@
 # of said person's immediate fault when using the work as intended.
 
 def unserialize(s):
-	return _unserialize_var(s)[0]
+    return _unserialize_var(s)[0]
 
 def _unserialize_var(s):
-	return (
-		{ 'i' : _unserialize_int
-		, 'b' : _unserialize_bool
-		, 'd' : _unserialize_double
-		, 'n' : _unserialize_null
-		, 's' : _unserialize_string
-		, 'a' : _unserialize_array
-		}[s[0].lower()](s[2:]))
+    return (
+        { 'i' : _unserialize_int
+        , 'b' : _unserialize_bool
+        , 'd' : _unserialize_double
+        , 'n' : _unserialize_null
+        , 's' : _unserialize_string
+        , 'a' : _unserialize_array
+        }[s[0].lower()](s[2:]))
 
 def _unserialize_int(s):
-	x = s.partition(';')
-	return (int(x[0]), x[2])
+    x = s.partition(';')
+    return (int(x[0]), x[2])
 
 def _unserialize_bool(s):
-	x = s.partition(';')
-	return (x[0] == '1', x[2])
+    x = s.partition(';')
+    return (x[0] == '1', x[2])
 
 def _unserialize_double(s):
-	x = s.partition(';')
-	return (float(x[0]), x[2])
+    x = s.partition(';')
+    return (float(x[0]), x[2])
 
 def _unserialize_null(s):
-	return (None, s)
+    return (None, s)
 
 def _unserialize_string(s):
-	(l, _, s) = s.partition(':')
-	return (s[1:int(l)+1], s[int(l)+3:])
+    (l, _, s) = s.partition(':')
+    return (s[1:int(l)+1], s[int(l)+3:])
 
 def _unserialize_array(s):
-	(l, _, s) = s.partition(':')
-	a, k, s = {}, None, s[1:]
+    (l, _, s) = s.partition(':')
+    a, k, s = {}, None, s[1:]
 
-	for i in range(0, int(l) * 2):
-		(v, s) = _unserialize_var(s)
+    for i in range(0, int(l) * 2):
+        (v, s) = _unserialize_var(s)
 
-		if k:
-			a[k] = v
-			k = None
-		else:
-			k = v
+        if k:
+            a[k] = v
+            k = None
+        else:
+            k = v
 
-	return (a, s[1:])
+    return (a, s[1:])
