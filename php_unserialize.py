@@ -37,6 +37,7 @@ def _unserialize_var(s):
         , 's' : _unserialize_string
         , 'a' : _unserialize_array
         , 'o' : _unserialize_object
+        , 'c' : _unserialize_custom
         }[s[0].lower()](s[2:]))
 
 def _unserialize_int(s):
@@ -73,6 +74,22 @@ def _unserialize_array(s):
 
     return (a, s[1:])
 
+def _unserialize_custom(s):
+    (l, _, s) = s.partition(':')
+    (n, _, s) = s.partition(':')
+    (l, _, s) = s.partition(':')
+
+    l = int(l)
+    d = s[1:l+1]
+    aa = { 'custom': n[1:-1], 'data': d }
+
+    try:
+        aa['parsed'] = unserialize(d)
+    except Exception, e:
+        aa['error'] = repr(e)
+
+    return (aa, s[l+2:])
+
 def _unserialize_object(s):
     (l, _, s) = s.partition(':')
     (n, _, s) = s.partition(':')
@@ -98,4 +115,5 @@ if __name__ == "__main__":
 
     serialised = sys.stdin.read()
     unserialised = unserialize(serialised)
+    # we need sort_keys because they are internally unordered anyway
     print json.dumps(unserialised, sys.stdout, indent=True, sort_keys=True)
