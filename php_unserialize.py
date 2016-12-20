@@ -36,6 +36,7 @@ def _unserialize_var(s):
         , 'n' : _unserialize_null
         , 's' : _unserialize_string
         , 'a' : _unserialize_array
+        , 'o' : _unserialize_object
         }[s[0].lower()](s[2:]))
 
 def _unserialize_int(s):
@@ -64,13 +65,31 @@ def _unserialize_array(s):
     for i in range(0, int(l) * 2):
         (v, s) = _unserialize_var(s)
 
-        if k:
+        if k is not None:
             a[k] = v
             k = None
         else:
             k = v
 
     return (a, s[1:])
+
+def _unserialize_object(s):
+    (l, _, s) = s.partition(':')
+    (n, _, s) = s.partition(':')
+    (l, _, s) = s.partition(':')
+    a, k, s = {}, None, s[1:]
+
+    for i in range(0, int(l) * 2):
+        (v, s) = _unserialize_var(s)
+
+        if k is not None:
+            a[k] = v
+            k = None
+        else:
+            k = v
+
+    aa = { 'class': n[1:-1], 'data': a }
+    return (aa, s[1:])
 
 
 if __name__ == "__main__":
