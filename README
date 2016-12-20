@@ -1,0 +1,6 @@
+This script can decipher files encoded by PHP’s serialize function,
+such as SimKolab state files.
+
+To use, simply pipe such a file through the script, for example:
+
+$ ./php_unserialize.py </path/to/file | less
