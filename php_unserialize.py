@@ -33,12 +33,12 @@ def _unserialize_var(s):
         { 'i' : _unserialize_int
         , 'b' : _unserialize_bool
         , 'd' : _unserialize_double
-        , 'n' : _unserialize_null
+        , 'N' : _unserialize_null
         , 's' : _unserialize_string
         , 'a' : _unserialize_array
-        , 'o' : _unserialize_object
-        , 'c' : _unserialize_custom
-        }[s[0].lower()](s[2:]))
+        , 'O' : _unserialize_object
+        , 'C' : _unserialize_custom
+        }[s[0]](s[2:]))
 
 def _unserialize_int(s):
     x = s.partition(';')
