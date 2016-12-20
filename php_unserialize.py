@@ -1,5 +1,14 @@
+#!/usr/bin/python
+# coding: UTF-8
+#-
+# Dump data files encoded by PHP’s “serialize” function, similar to:
+# http://php.net/manual/en/function.unserialize.php
+# Originally from: http://blog.desudesudesu.org/?p=1046
+#
+# Copyright (c) 2014, 2016
+#   mirabilos <t.glaser@tarent.de>
 # Copyright (c) 2009
-#	L Campbell <llc2w@virginia.edu>
+#   L Campbell <llc2w@virginia.edu>
 #
 # Provided that these terms and disclaimer and all copyright notices
 # are retained or reproduced in an accompanying document, permission
@@ -62,3 +71,12 @@ def _unserialize_array(s):
             k = v
 
     return (a, s[1:])
+
+
+if __name__ == "__main__":
+    import sys
+    import json
+
+    serialised = sys.stdin.read()
+    unserialised = unserialize(serialised)
+    print json.dumps(unserialised, sys.stdout, indent=True, sort_keys=True)
