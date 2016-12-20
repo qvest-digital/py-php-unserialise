@@ -38,6 +38,8 @@ def _unserialize_var(s):
         , 'a' : _unserialize_array
         , 'O' : _unserialize_object
         , 'C' : _unserialize_custom
+        , 'R' : _unserialize_reference_value
+        , 'r' : _unserialize_reference_object
         }[s[0]](s[2:]))
 
 def _unserialize_int(s):
@@ -108,7 +110,20 @@ def _unserialize_object(s):
     aa = { 'class': n[1:-1], 'data': a }
     return (aa, s[1:])
 
+# we should probably decode that, but JSON doesn’t support it anyway
+# cf. http://www.phpinternalsbook.com/classes_objects/serialization.html
+def _unserialize_reference(what, s):
+    x = s.partition(';')
+    return (['reference', what, int(x[0])], x[2])
 
+def _unserialize_reference_value(s):
+    return _unserialize_reference('value', s)
+
+def _unserialize_reference_object(s):
+    return _unserialize_reference('object', s)
+
+
+# this is mostly for debugging (php_unserialize.py <foo | less)
 if __name__ == "__main__":
     import sys
     import json
