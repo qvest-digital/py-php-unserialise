@@ -5,7 +5,7 @@
 # http://php.net/manual/en/function.unserialize.php
 # Originally from: http://blog.desudesudesu.org/?p=1046
 #
-# Copyright (c) 2014, 2016
+# Copyright (c) 2014, 2016, 2018
 #   mirabilos <t.glaser@tarent.de>
 # Copyright (c) 2009
 #   L Campbell <llc2w@virginia.edu>
@@ -24,6 +24,8 @@
 # of dealing in the work, even if advised of the possibility of such
 # damage or existence of a defect, except proven that it results out
 # of said person's immediate fault when using the work as intended.
+#-
+# This script is py3k safe, tested with Python 2.7.15 and 3.6.6
 
 def unserialize(s):
     return _unserialize_var(s)[0]
@@ -87,7 +89,7 @@ def _unserialize_custom(s):
 
     try:
         aa['parsed'] = unserialize(d)
-    except Exception, e:
+    except Exception as e:
         aa['error'] = repr(e)
 
     return (aa, s[l+2:])
@@ -131,4 +133,4 @@ if __name__ == "__main__":
     serialised = sys.stdin.read()
     unserialised = unserialize(serialised)
     # we need sort_keys because they are internally unordered anyway
-    print json.dumps(unserialised, sys.stdout, indent=True, sort_keys=True)
+    print(json.dumps(unserialised, indent=True, sort_keys=True))
