@@ -133,4 +133,4 @@ if __name__ == "__main__":
     serialised = sys.stdin.read()
     unserialised = unserialize(serialised)
     # we need sort_keys because they are internally unordered anyway
-    print(json.dumps(unserialised, indent=True, sort_keys=True))
+    print(json.dumps(unserialised, ensure_ascii=False, indent=True, sort_keys=True))
